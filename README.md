@@ -123,15 +123,15 @@ In the server.js code above a new instance of the hapi server is started using t
 
 Go ahead and run npm start or node server.js to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://locahost:8080/products>.  Below is a screenshot of what the response looks like.
 
-(./images/products.png)
+<img src="https://raw.github.com/wpreul/hapi-example/master/images/products.png" height="75px" width="auto" />
 
 Go ahead and append ?name=banjo to the URL to try searching for a product by name.
 
-(./images/banjo.png)
+<img src="https://raw.github.com/wpreul/hapi-example/master/images/banjo.png" height="75px" width="auto" />
 
 Use curl or a REST console to create a product.  Make a POST request to the products endpoint with a name in the body.  Below is an example of the response headers from making a request to create a product.
 
-(./images/headers.png)
+<img src="https://raw.github.com/wpreul/hapi-example/master/images/headers.png" height="225px" width="auto" />
 
 
 Now if you navigate to the Location specified in the response headers you should see the product that you created.
