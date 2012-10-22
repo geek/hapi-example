@@ -1,10 +1,10 @@
 **Making an API happy with hapi**
 
-Whether you are building a very simple set of RESTful services or a large scale, cache heavy, and secure set of services, hapi has you covered.  Hapi will help get your server developed quickly with its wide range of configurable options.
+Whether you are building a very simple set of RESTful services or a large scale, cache heavy, and secure set of services, [hapi](http://walmartlabs.github.com/hapi/) has you covered.  [Hapi](http://walmartlabs.github.com/hapi/) will help get your server developed quickly with its wide range of configurable options.
 
 ***Building a Products API***
 
-The following example will walk you through using hapi to build a RESTful set of services for creating and listing out products.  To get started create a directory named ‘ProductsAPI’ and add a package.json file to the directory that looks like the following.
+The following example will walk you through using hapi to build a RESTful set of services for creating and listing out products.  To get started create a directory named ‘ProductsAPI’ and add a _package.json_ file to the directory that looks like the following.
 
 
 ```json
@@ -121,27 +121,27 @@ In the server.js code above a new instance of the hapi server is started using t
 
 ***Running the server***
 
-Go ahead and run npm start or node server.js to start the server.  Now you can navigate to http://localhost:8080/docs to see the documentation for the routes.  To see a list of the products navigate to http://locahost:8080/products.  Below is a screenshot of what the response looks like.
+Go ahead and run npm start or node server.js to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://locahost:8080/products>.  Below is a screenshot of what the response looks like.
 
-
-
+(./images/products.png)
 
 Go ahead and append ?name=banjo to the URL to try searching for a product by name.
 
+(./images/banjo.png)
 
 Use curl or a REST console to create a product.  Make a POST request to the products endpoint with a name in the body.  Below is an example of the response headers from making a request to create a product.
 
-
+(./images/headers.png)
 
 
 Now if you navigate to the Location specified in the response headers you should see the product that you created.
 
 Other features
-There are a lot of different configuration features that you can add to the server.  The extensive list can be found in the readme at https://github.com/walmartlabs/hapi/#server-configuration.
+There are a lot of different configuration features that you can add to the server.  The extensive list can be found in the readme at <https://github.com/walmartlabs/hapi/#server-configuration>.
 
 The built-in cache support has providers for mongo and redis.  Setting up cache is as simple as passing cache: true as part of the server configuration.
 
-Additionally, there are several configuration options available on a per route basis.  The full list can be found at https://github.com/walmartlabs/hapi/#route-configuration.  For example, caching expiration times can also be configured on a per route basis.  Also, you can have per-route authentication settings.
+Additionally, there are several configuration options available on a per route basis.  The full list can be found at <https://github.com/walmartlabs/hapi/#route-configuration>.  For example, caching expiration times can also be configured on a per route basis.  Also, you can have per-route authentication settings.
 
 ***Conclusion***
 
