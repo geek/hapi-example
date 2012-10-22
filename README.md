@@ -1,10 +1,13 @@
-Making an API happy with hapi
+**Making an API happy with hapi**
 
 Whether you are building a very simple set of RESTful services or a large scale, cache heavy, and secure set of services, hapi has you covered.  Hapi will help get your server developed quickly with its wide range of configurable options.
 
-Building a Products API
+***Building a Products API***
+
 The following example will walk you through using hapi to build a RESTful set of services for creating and listing out products.  To get started create a directory named ‘ProductsAPI’ and add a package.json file to the directory that looks like the following.
 
+
+```json
 {
     "name": "ProductsAPI",
     "version": "0.0.1",
@@ -17,20 +20,25 @@ The following example will walk you through using hapi to build a RESTful set of
     },
     "private": "true"
 }
+```
 
-Then run npm install.
+Then run `npm install`.
 
-Create a routes.js file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its Types property to a local variable like below.
+Create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its Types property to a local variable like below.
 
+```javascript
 var t = require('hapi').Types;
+```
 
 For this example 3 routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your routes.js file.
 
+```javascript
 module.exports = [
     { method: 'GET', path: '/products', config: { handler: getProducts, query: { name: t.String() } } },
     { method: 'GET', path: '/products/{id}', config: { handler: getProduct } },
     { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', schema: { name: t.String().required().min(3) }, response: { id: t.Number().required() } } }
 ];
+```
 
 The routes are exported as an array so that they can easily be included by the server implementation later in the example.  For now please note that within the config object you can define validation requirements.  For the products listing endpoint we are allowing a querystring parameter for name.  When this querystring parameter exists then we will filter the products for the ones that have the matching name.
 
@@ -38,8 +46,9 @@ The second route is a very simple route that demonstrates how a parameter can be
 
 In the last route, the one used for creating a product, you will notice that extra validation requirements are added, even those on the response body.  The request body must contain a parameter for name that has a minimum of 3 characters and the response body must contain an ID to be validated.
 
-Next add the handlers to the routes.js file.
+Next add the handlers to the _routes.js_ file.
 
+```javascript
 function getProducts(request) {
 
     if (request.query.name) {
@@ -76,11 +85,13 @@ function addProduct(request) {
         id: product.id
     });
 }
+```
 
-As you can see in the handlers, hapi provides a simple way to add a response body by using the request.reply function.  Also, in the instance when you have created an item you can use the request.reply.created function to send a 201 response.
+As you can see in the handlers, hapi provides a simple way to add a response body by using the _request.reply_ function.  Also, in the instance when you have created an item you can use the _request.reply.created_ function to send a 201 response.
 
 Lastly, add a simple array to contain the products that the service will serve.
 
+```javascript
 var products = [{
         id: 1,
         name: 'Guitar'
@@ -90,9 +101,11 @@ var products = [{
         name: 'Banjo'
     }
 ];
+```
 
-The next and final file that needs to be created is server.js.  This will be the entry point for the service.  Create this file and add the following contents.
+The next and final file that needs to be created is _server.js_.  This will be the entry point for the service.  Create this file and add the following contents.
 
+```javascript
 var hapi = require('hapi');
 var routes = require('./routes');
 
@@ -102,9 +115,12 @@ var http = new hapi.Server('0.0.0.0', 8080, config);
 http.addRoutes(routes);
 
 http.start();
+```
 
 In the server.js code above a new instance of the hapi server is started using the configuration specified in config.  By setting docs to true the documentation generator will be enabled.  This provides a set of pages that explain what endpoints are available and the requirements for those endpoints.
-Running the server
+
+***Running the server***
+
 Go ahead and run npm start or node server.js to start the server.  Now you can navigate to http://localhost:8080/docs to see the documentation for the routes.  To see a list of the products navigate to http://locahost:8080/products.  Below is a screenshot of what the response looks like.
 
 
@@ -127,6 +143,7 @@ The built-in cache support has providers for mongo and redis.  Setting up cache 
 
 Additionally, there are several configuration options available on a per route basis.  The full list can be found at https://github.com/walmartlabs/hapi/#route-configuration.  For example, caching expiration times can also be configured on a per route basis.  Also, you can have per-route authentication settings.
 
-Conclusion
+***Conclusion***
+
 By now you should have a decent understanding of what hapi has to offer.  There are still many other features and options available to you when using hapi that is covered in the documentation.  Please take a look at the github repository and feel free to provide any feedback you may have.
 
