@@ -4,7 +4,7 @@ Whether you are building a very simple set of RESTful services or a large scale,
 
 ***Building a Products API***
 
-The following example will walk you through using hapi to build a RESTful set of services for creating and listing out products.  To get started create a directory named ‘ProductsAPI’ and add a _package.json_ file to the directory that looks like the following.
+The following example will walk you through using hapi to build a RESTful set of services for creating and listing out products.  To get started create a directory named _ProductsAPI_ and add a _package.json_ file to the directory that looks like the following.
 
 
 ```json
@@ -24,13 +24,13 @@ The following example will walk you through using hapi to build a RESTful set of
 
 Then run `npm install`.
 
-Create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its Types property to a local variable like below.
+Create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
 
 ```javascript
 var t = require('hapi').Types;
 ```
 
-For this example 3 routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your routes.js file.
+For this example three routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your routes.js file.
 
 ```javascript
 module.exports = [
