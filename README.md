@@ -24,13 +24,29 @@ The following example will walk you through using hapi to build a RESTful set of
 
 Then run `npm install`.
 
-Create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
+Create a _server.js_ file that will serve as the entry point for the service.  Add the following contents to the _server.js_ file.
+
+```javascript
+var hapi = require('hapi');
+var routes = require('./routes');
+
+var config = { name: 'Products', docs: true };
+var http = new hapi.Server('0.0.0.0', 8080, config);
+
+http.addRoutes(routes);
+
+http.start();
+```
+
+In the server.js code above a new instance of the hapi server is started using the configuration specified in config.  By setting docs to true the documentation generator will be enabled.  The documentation generator provides a set of pages that explain what endpoints are available and the requirements for those endpoints.
+
+Hapi provides a function for adding a single route or an array of routes.  In this example we are adding an array of routes from a routes file, go ahead and create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
 
 ```javascript
 var t = require('hapi').Types;
 ```
 
-For this example three routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your routes.js file.
+For this example three routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your _routes.js_ file.
 
 ```javascript
 module.exports = [
@@ -40,7 +56,7 @@ module.exports = [
 ];
 ```
 
-The routes are exported as an array so that they can easily be included by the server implementation later in the example.  For now please note that within the config object you can define validation requirements.  For the products listing endpoint we are allowing a querystring parameter for name.  When this querystring parameter exists then we will filter the products for the ones that have the matching name.
+The routes are exported as an array so that they can easily be included by the server implementation we added.  For the products listing endpoint we are allowing a querystring parameter for name.  When this querystring parameter exists then we will filter the products for those that have a matching name.
 
 The second route is a very simple route that demonstrates how a parameter can become part of the path definition.  This route will return a product with the matching ID that’s requested.
 
@@ -103,25 +119,9 @@ var products = [{
 ];
 ```
 
-The next and final file that needs to be created is _server.js_.  This will be the entry point for the service.  Create this file and add the following contents.
-
-```javascript
-var hapi = require('hapi');
-var routes = require('./routes');
-
-var config = { name: 'Products', docs: true };
-var http = new hapi.Server('0.0.0.0', 8080, config);
-
-http.addRoutes(routes);
-
-http.start();
-```
-
-In the server.js code above a new instance of the hapi server is started using the configuration specified in config.  By setting docs to true the documentation generator will be enabled.  This provides a set of pages that explain what endpoints are available and the requirements for those endpoints.
-
 ***Running the server***
 
-Go ahead and run npm start or node server.js to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://locahost:8080/products>.  Below is a screenshot of what the response looks like.
+Go ahead and run ``npm start`` or ``node server.js`` to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://locahost:8080/products>.  Below is a screenshot of what the response looks like.
 
 <img src="https://raw.github.com/wpreul/hapi-example/master/images/products.png" height="75px" width="auto" />
 
