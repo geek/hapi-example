@@ -31,7 +31,7 @@ var hapi = require('hapi');
 var routes = require('./routes');
 
 var config = { name: 'Products', docs: true };
-var http = new hapi.Server('0.0.0.0', 8080, config);
+var http = new hapi.Server('0.0.0.0', 8080, config);        // 8080 is the port to listen on
 
 http.addRoutes(routes);
 
@@ -129,12 +129,12 @@ Go ahead and append ?name=banjo to the URL to try searching for a product by nam
 
 <img src="https://raw.github.com/wpreul/hapi-example/master/images/banjo.png" height="75px" width="auto" />
 
-Use curl or a REST console to create a product.  Make a POST request to the products endpoint with a name in the body.  Below is an example of the response headers from making a request to create a product.
+Use curl or a REST console to create a product.  Make a POST request to the products endpoint with a name in the body.  Using curl the command looks like: ``curl http://localhost:8080/products -d "name=test"``. Below is an example of the response headers from making a request to create a product.
 
 <img src="https://raw.github.com/wpreul/hapi-example/master/images/headers.png" height="225px" width="auto" />
 
 
-Now if you navigate to the Location specified in the response headers you should see the product that you created.
+Now if you navigate to the _Location_ specified in the response headers you should see the product that you created.
 
 Other features
 There are a lot of different configuration features that you can add to the server.  The extensive list can be found in the readme at <https://github.com/walmartlabs/hapi/#server-configuration>.
