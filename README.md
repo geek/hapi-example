@@ -1,6 +1,6 @@
 **Making an API happy with hapi**
 
-Whether you are building a very simple set of RESTful services or a large scale, cache heavy, and secure set of services, [hapi](http://walmartlabs.github.com/hapi/) has you covered.  [Hapi](http://walmartlabs.github.com/hapi/) will help get your server developed quickly with its wide range of configurable options.
+[Hapi](http://walmartlabs.github.com/hapi/) is a framework for rapidly building RESTful web services.  Whether you are building a very simple set of RESTful services or a large scale, cache heavy, and secure set of services, [hapi](http://walmartlabs.github.com/hapi/) has you covered.  [Hapi](http://walmartlabs.github.com/hapi/) will help get your server developed quickly with its wide range of configurable options.
 
 ***Building a Products API***
 
@@ -38,9 +38,11 @@ http.addRoutes(routes);
 http.start();
 ```
 
-In the server.js code above a new instance of the hapi server is started using the configuration specified in config.  By setting docs to true the documentation generator will be enabled.  The documentation generator provides a set of pages that explain what endpoints are available and the requirements for those endpoints.
+In the _server.js_ code above a new instance of the hapi server is started using the configuration specified in _config_.  
 
-Hapi provides a function for adding a single route or an array of routes.  In this example we are adding an array of routes from a routes file, go ahead and create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying validation requirements.  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
+By setting docs to true the [documentation generator](https://github.com/walmartlabs/hapi#documentation) will be enabled.  The documentation generator provides a set of pages that explain what endpoints are available and the requirements for those endpoints.  The documentation generator will use the validation rules you will create for each route to construct appropriate documentation pages under the _/docs_ path.
+
+Hapi provides a function for adding a single route or an array of routes.  In this example we are adding an array of routes from a routes file, go ahead and create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying [validation requirements](https://github.com/walmartlabs/hapi/#data-validation).  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
 
 ```javascript
 var t = require('hapi').Types;
