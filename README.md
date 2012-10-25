@@ -30,7 +30,7 @@ Create a _server.js_ file that will serve as the entry point for the service.  A
 var hapi = require('hapi');
 var routes = require('./routes');
 
-var config = { name: 'Products', docs: true };
+var config = { docs: true };
 var http = new hapi.Server('0.0.0.0', 8080, config);        // 8080 is the port to listen on
 
 http.addRoutes(routes);
@@ -42,19 +42,19 @@ In the _server.js_ code above a new instance of the hapi server is started using
 
 By setting docs to true the [documentation generator](https://github.com/walmartlabs/hapi#documentation) will be enabled.  The documentation generator provides a set of pages that explain what endpoints are available and the requirements for those endpoints.  The documentation generator will use the validation rules you will create for each route to construct appropriate documentation pages under the _/docs_ path.
 
-Hapi provides a function for adding a single route or an array of routes.  In this example we are adding an array of routes from a routes file, go ahead and create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying [validation requirements](https://github.com/walmartlabs/hapi/#data-validation).  Therefore, at the top of the file require hapi and assign its _Types_ property to a local variable like below.
+[Hapi](http://walmartlabs.github.com/hapi/) provides a function for adding a single route or an array of routes.  In this example we are adding an array of routes from a routes module, go ahead and create a _routes.js_ file, which will contain the route information and handlers.  When defining the routes we will also be specifying [validation requirements](https://github.com/walmartlabs/hapi/#data-validation).  Therefore, at the top of the file require _hapi_ and assign its _Types_ property to a local variable like below.
 
 ```javascript
-var t = require('hapi').Types;
+var Types = require('hapi').Types;
 ```
 
 For this example three routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your _routes.js_ file.
 
 ```javascript
 module.exports = [
-    { method: 'GET', path: '/products', config: { handler: getProducts, query: { name: t.String() } } },
+    { method: 'GET', path: '/products', config: { handler: getProducts, query: { name: Types.String() } } },
     { method: 'GET', path: '/products/{id}', config: { handler: getProduct } },
-    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', schema: { name: t.String().required().min(3) }, response: { id: t.Number().required() } } }
+    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', schema: { name: Types.String().required().min(3) }, response: { id: Types.Number().required() } } }
 ];
 ```
 
