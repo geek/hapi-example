@@ -1,7 +1,7 @@
 var Hapi = require('hapi');
 var routes = require('./routes');
 
-var config = { }; // See: 
+var config = { };
 var server = new Hapi.Server('0.0.0.0', 8080, config);
 server.pack.require({ lout: { endpoint: '/docs' } }, function (err) {
 

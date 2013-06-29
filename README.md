@@ -32,7 +32,7 @@ Create a _server.js_ file that will serve as the entry point for the service.  A
 var Hapi = require('hapi');
 var routes = require('./routes');
 
-var config = { }; // See: http://spumko.github.io/resource/api/#server-options
+var config = { };
 var server = new Hapi.Server('0.0.0.0', 8080, config);
 server.pack.require({ lout: { endpoint: '/docs' } }, function (err) {
 
@@ -110,11 +110,11 @@ function addProduct(request) {
 
     products.push(product);
 
-    request.reply(product).code(201).header('Location: /products/' + product.id);
+    request.reply(product).code(201).header('Location,: /products/' + product.id);
 }
 ```
 
-As you can see in the handlers, hapi provides a simple way to add a response body by using the _request.reply_ function.  Also, in the instance when you have created an item you can use the _request.reply({}).code(201)_ function to send a 201 response.
+As you can see in the handlers, hapi provides a simple way to add a response body by using the _request.reply_ function.  Also, in the instance when you have created an item you can use the _request.reply({}).code(201).header('Location', '/products/' + product.id)_ functions to send a 201 response and set a custom response header.
 
 Lastly, add a simple array to contain the products that the service will serve.
 
