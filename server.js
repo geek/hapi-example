@@ -1,9 +1,15 @@
-var hapi = require('hapi');
+var Hapi = require('hapi');
 var routes = require('./routes');
 
-var config = { name: 'Products', docs: true, batch: true };
-var http = new hapi.Server('0.0.0.0', 8080, config);
+var config = { }; // See: 
+var server = new Hapi.Server('0.0.0.0', 8080, config);
+server.pack.require({ lout: { endpoint: '/docs' } }, function (err) {
 
-http.addRoutes(routes);
+    if (err) {
+        console.log('Failed loading plugins');
+    }
+});
 
-http.start();
+server.addRoutes(routes);
+
+server.start();
