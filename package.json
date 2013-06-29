@@ -1,12 +1,14 @@
 {
     "name": "ProductsAPI",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "server",
     "engines": {
-        "node": ">=0.8.0"
+        "node": ">=0.10.5"
     },
     "dependencies": {
-        "hapi": "0.8.x"
+        "hapi": "1.8.x",
+        "lout": "0.4.x",
+        "handlebars": "1.0.x"
     },
     "private": "true"
 }
