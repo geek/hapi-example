@@ -1,9 +1,9 @@
-var t = require('hapi').Types;
+var Types = require('hapi').types;
 
 module.exports = [
-    { method: 'GET', path: '/products', config: { handler: getProducts, query: { name: t.String() } } },
+    { method: 'GET', path: '/products', config: { handler: getProducts, validate: { query: { name: Types.String() } } } },
     { method: 'GET', path: '/products/{id}', config: { handler: getProduct } },
-    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', schema: { name: t.String().required().min(3) }, response: { id: t.Number().required() } } }
+    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', validate: { payload: { name: Types.String().required().min(3) } } } }
 ];
 
 var products = [{
@@ -27,20 +27,23 @@ function getProducts(request) {
 }
 
 function findProducts(name) {
+
     return products.filter(function(product) {
         return product.name.toLowerCase() === name.toLowerCase();
     });
 }
 
 function getProduct(request) {
+
     var product = products.filter(function(p) {
-        return p.id == request.params.id;
+        return p.id === parseInt(request.params.id);
     }).pop();
 
     request.reply(product);
 }
 
 function addProduct(request) {
+
     var product = {
         id: products[products.length - 1].id + 1,
         name: request.payload.name
@@ -48,7 +51,5 @@ function addProduct(request) {
 
     products.push(product);
 
-    request.reply.created('/products/' + product.id)({
-        id: product.id
-    });
+    request.reply(product).code(201).header('Location', '/products/' + product.id);
 }
