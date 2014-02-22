@@ -132,7 +132,7 @@ var products = [{
 
 ***Running the server***
 
-Go ahead and run ``npm start`` or ``node server.js`` to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://locahost:8080/products>.  Below is a screenshot of what the response looks like.
+Go ahead and run ``npm start`` or ``node server.js`` to start the server.  Now you can navigate to <http://localhost:8080/docs> to see the documentation for the routes.  To see a list of the products navigate to <http://localhost:8080/products>.  Below is a screenshot of what the response looks like.
 
 <img src="https://raw.github.com/wpreul/hapi-example/master/images/products.png" height="75px" width="auto" />
 
