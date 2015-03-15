@@ -110,11 +110,11 @@ function addProduct(request) {
 
     products.push(product);
 
-    request.reply(product).code(201).header('Location,: /products/' + product.id);
+    request.reply(product).created('/products/' + product.id);
 }
 ```
 
-As you can see in the handlers, hapi provides a simple way to add a response body by using the _request.reply_ function.  Also, in the instance when you have created an item you can use the _request.reply({}).code(201).header('Location', '/products/' + product.id)_ functions to send a 201 response and set a custom response header.
+As you can see in the handlers, hapi provides a simple way to add a response body by using the `request.reply` function.  Also, in the instance when you have created an item you can use the `request.reply(product).created('/products/' + product.id)` functions to send a `201` response and set a custom `Location` header.
 
 Lastly, add a simple array to contain the products that the service will serve.
 
