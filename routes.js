@@ -1,10 +1,35 @@
 var Types = require('hapi').types;
 
-module.exports = [
-    { method: 'GET', path: '/products', config: { handler: getProducts, validate: { query: { name: Types.String() } } } },
-    { method: 'GET', path: '/products/{id}', config: { handler: getProduct } },
-    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', validate: { payload: { name: Types.String().required().min(3) } } } }
-];
+module.exports = [{
+    method: 'GET',
+    path: '/products',
+    config: {
+        handler: getProducts,
+        validate: {
+            query: {
+                name: Types.String()
+            }
+        }
+    }
+}, {
+    method: 'GET',
+    path: '/products/{id}',
+    config: {
+        handler: getProduct
+    }
+}, {
+    method: 'POST',
+    path: '/products',
+    config: {
+        handler: addProduct,
+        payload: 'parse',
+        validate: {
+            payload: {
+                name: Types.String().required().min(3)
+            }
+        }
+    }
+}];
 
 var products = [{
         id: 1,
