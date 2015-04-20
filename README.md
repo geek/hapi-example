@@ -59,11 +59,36 @@ var Types = require('hapi').types;
 For this example three routes will be created.  Below is the code you should use to add the routes, go ahead and add the code to your _routes.js_ file.
 
 ```javascript
-module.exports = [
-    { method: 'GET', path: '/products', config: { handler: getProducts, validate: { query: { name: Types.String() } } } },
-    { method: 'GET', path: '/products/{id}', config: { handler: getProduct } },
-    { method: 'POST', path: '/products', config: { handler: addProduct, payload: 'parse', validate: { payload: { name: Types.String().required().min(3) } } } }
-];
+module.exports = [{
+    method: 'GET',
+    path: '/products',
+    config: {
+        handler: getProducts,
+        validate: {
+            query: {
+                name: Types.String()
+            }
+        }
+    }
+}, {
+    method: 'GET',
+    path: '/products/{id}',
+    config: {
+        handler: getProduct
+    }
+}, {
+    method: 'POST',
+    path: '/products',
+    config: {
+        handler: addProduct,
+        payload: 'parse',
+        validate: {
+            payload: {
+                name: Types.String().required().min(3)
+            }
+        }
+    }
+}];
 ```
 
 The routes are exported as an array so that they can easily be included by the server implementation we added.  For the products listing endpoint we are allowing a querystring parameter for name.  When this querystring parameter exists then we will filter the products for those that have a matching name.
