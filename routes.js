@@ -1,4 +1,4 @@
-var Types = require('hapi').types;
+var Joi = require('joi');
 
 module.exports = [{
     method: 'GET',
@@ -7,26 +7,21 @@ module.exports = [{
         handler: getProducts,
         validate: {
             query: {
-                name: Types.String()
+                name: Joi.string()
             }
         }
     }
 }, {
     method: 'GET',
     path: '/products/{id}',
-    config: {
-        handler: getProduct
-    }
+    handler: getProduct
 }, {
     method: 'POST',
     path: '/products',
     config: {
         handler: addProduct,
-        payload: 'parse',
         validate: {
-            payload: {
-                name: Types.String().required().min(3)
-            }
+            payload:  Joi.string().required().min(3)
         }
     }
 }];
@@ -41,34 +36,30 @@ var products = [{
     }
 ];
 
-function getProducts(request) {
-
+function getProducts(request, reply) {
     if (request.query.name) {
-        request.reply(findProducts(request.query.name));
+        reply(findProducts(request.query.name));
     }
     else {
-        request.reply(products);
+        reply(products);
     }
 }
 
 function findProducts(name) {
-
     return products.filter(function(product) {
         return product.name.toLowerCase() === name.toLowerCase();
     });
 }
 
-function getProduct(request) {
-
+function getProduct(request, reply) {
     var product = products.filter(function(p) {
         return p.id === parseInt(request.params.id);
     }).pop();
 
-    request.reply(product);
+    reply(product);
 }
 
-function addProduct(request) {
-
+function addProduct(request, reply) {
     var product = {
         id: products[products.length - 1].id + 1,
         name: request.payload.name
@@ -76,5 +67,5 @@ function addProduct(request) {
 
     products.push(product);
 
-    request.reply(product).code(201).header('Location', '/products/' + product.id);
+    reply(product).created('/products/' + product.id);
 }
