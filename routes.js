@@ -1,4 +1,6 @@
-var Joi = require('joi');
+'use strict';
+
+const Joi = require('joi');
 
 module.exports = [{
     method: 'GET',
@@ -26,7 +28,7 @@ module.exports = [{
     }
 }];
 
-var products = [{
+const products = [{
         id: 1,
         name: 'Guitar'
     },
@@ -52,7 +54,7 @@ function findProducts(name) {
 }
 
 function getProduct(request, reply) {
-    var product = products.filter(function(p) {
+    const product = products.filter(function(p) {
         return p.id === parseInt(request.params.id);
     }).pop();
 
@@ -60,7 +62,7 @@ function getProduct(request, reply) {
 }
 
 function addProduct(request, reply) {
-    var product = {
+    const product = {
         id: products[products.length - 1].id + 1,
         name: request.payload.name
     };

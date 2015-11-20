@@ -1,11 +1,13 @@
-var Hapi = require('hapi');
-var routes = require('./routes');
+'use strict';
 
-var config = {};
-var server = new Hapi.Server(config);
+const Hapi = require('hapi');
+const routes = require('./routes');
 
-var port = 8080;
-var host = '0.0.0.0';
+const config = {};
+const server = new Hapi.Server(config);
+
+const port = 8080;
+const host = '0.0.0.0';
 server.connection({port: port, host: host});
 
 server.route(routes);
@@ -17,7 +19,7 @@ server.register([require('vision'), require('inert'), {
 
     if(err) {
         console.log('Failed loading plugins');
-        return
+        return;
     }
 
     server.start(function () {
