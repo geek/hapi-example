@@ -7,7 +7,11 @@
 [Hapi](https://github.com/hapijs/hapi/) will help get your server developed quickly with its wide
 range of configurable options.
 
-*This example is based on `hapi@11`*
+*This example is based on `hapi@11`*.
+Another great place to start if you are new to hapi is
+[the official get started](http://hapijs.com/tutorials),
+[learn hapi repo](https://github.com/nelsonic/learn-hapi),
+and [the nodeschool makemehapi](https://github.com/hapijs/makemehapi)
 
 ## Building a Products API
 
