@@ -2,72 +2,80 @@
 
 const Joi = require('joi');
 
+let internals = {};
+
+internals.getProducts = function (request, reply) {
+
+    if (request.query.name) {
+        return reply(internals.findProducts(request.query.name));
+    }
+    reply(internals.products);
+}
+
+internals.findProducts = function (name) {
+
+    return internals.products.filter((product) => {
+
+        return product.name.toLowerCase() === name.toLowerCase();
+    });
+}
+
+internals.getProduct = function (request, reply) {
+
+    const filtered = internals.products.filter((product) => {
+
+        return product.id === parseInt(request.params.id);
+    }).pop();
+
+    reply(filtered);
+}
+
+internals.addProduct = function (request, reply) {
+
+    const product = {
+        id: internals.products[internals.products.length - 1].id + 1,
+        name: request.payload.name
+    };
+
+    internals.products.push(product);
+
+    reply(product).created('/products/' + product.id);
+}
+
+
 module.exports = [{
     method: 'GET',
     path: '/products',
     config: {
-        handler: getProducts,
         validate: {
             query: {
                 name: Joi.string()
             }
-        }
+        },
+        handler: internals.getProducts
     }
 }, {
     method: 'GET',
     path: '/products/{id}',
-    handler: getProduct
+    handler: internals.getProduct
 }, {
     method: 'POST',
     path: '/products',
     config: {
-        handler: addProduct,
         validate: {
-            payload: {name: Joi.string().required().min(3)}
-        }
+            payload: { name: Joi.string().required().min(3) }
+        },
+        handler: internals.addProduct
     }
 }];
 
-const products = [{
-    id: 1,
-    name: 'Guitar'
-},
+internals.products = [
+    {
+        id: 1,
+        name: 'Guitar'
+    },
     {
         id: 2,
         name: 'Banjo'
     }
 ];
-
-function getProducts(request, reply) {
-    if (request.query.name) {
-        reply(findProducts(request.query.name));
-    }
-    else {
-        reply(products);
-    }
-}
-
-function findProducts(name) {
-    return products.filter(function (product) {
-        return product.name.toLowerCase() === name.toLowerCase();
-    });
-}
-
-function getProduct(request, reply) {
-    const product = products.filter(function (p) {
-        return p.id === parseInt(request.params.id);
-    }).pop();
-
-    reply(product);
-}
-
-function addProduct(request, reply) {
-    const product = {
-        id: products[products.length - 1].id + 1,
-        name: request.payload.name
-    };
-
-    products.push(product);
-
-    reply(product).created('/products/' + product.id);
-}

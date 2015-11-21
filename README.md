@@ -1,10 +1,10 @@
 # Making an API happy with hapi
 
-[Hapi](https://github.com/hapijs/hapi) is a framework for rapidly building RESTful web services.
+[hapi](https://github.com/hapijs/hapi) is a framework for rapidly building RESTful web services.
  Whether you are building a very simple set of RESTful services or a large scale, cache heavy,
  and secure set of services, [hapi](https://github.com/spumko/hapi/) has you covered.
 
-[Hapi](https://github.com/hapijs/hapi/) will help get your server developed quickly with its wide
+[hapi](https://github.com/hapijs/hapi/) will help get your server developed quickly with its wide
 range of configurable options.
 
 *This example is based on `hapi@11`*.
@@ -26,15 +26,14 @@ add a `package.json` file to the directory that looks like the following.
     "version": "0.0.3",
     "main": "server",
     "engines": {
-        "node": ">=4.0.0"
+      "node": ">=4.0.0"
     },
     "dependencies": {
-        "hapi": "11.x.x",
-        "lout": "7.2.x",
-        "joi": "7.x.x",
-        "handlebars": "1.0.x"
-    },
-    "private": "true"
+      "hapi": "11.x.x",
+      "lout": "7.x.x",
+      "joi": "7.x.x",
+      "handlebars": "4.x.x"
+    }
 }
 ```
 
@@ -44,20 +43,24 @@ Create a `server.js file that will serve as the entry point for the service.
  Add the following contents to the `server.js` file.
 
 ```javascript
-var Hapi = require('hapi');
-var routes = require('./routes');
+const Hapi = require('hapi');
+const Inert = require('inert');
+const Lout = require('lout');
+const Vision = require('vision');
+const Routes = require('./routes');
 
 var config = {};
-var server = new Hapi.Server(config);
-server.register([require('vision'), require('inert'), require('lout')],
-     function(err) {
-        if(err)
-            console.log('Failed loading plugins');
-        else
-            server.start(function () {
-                console.log('Server running at:', server.info.uri);
-        });
+var server = new hapi.Server(config);
+server.register([Vision, Inert, Lout], (err) => {
 
+    if (err)
+        console.error('Failed loading plugins');
+        process.exit(1);
+
+    server.start(() => {
+
+        console.log('Server running at:', server.info.uri);
+    });
 });
 ```
 
@@ -69,7 +72,7 @@ The documentation generator provides a set of pages that explain what endpoints 
 for those endpoints.  The documentation generator will use the validation rules you will create for each route to
 construct appropriate documentation pages under the `/docs` path.
 
-[Hapi](https://github.com/hapijs/hapi/) provides a function for adding a single route or an array of routes.
+[hapi](https://github.com/hapijs/hapi/) provides a function for adding a single route or an array of routes.
 In this example we are adding an array of routes from a routes module, go ahead and create a `routes.js` file,
  which will contain the route information and handlers.  When defining the routes we will also be specifying
  [validation requirements](http://hapijs.com/tutorials/validation).
@@ -117,36 +120,42 @@ The request body must contain a parameter for name that has a minimum of 3 chara
 Next add the handlers to the _routes.js_ file.
 
 ```javascript
-function getProducts(request, reply) {
+let internals = {};
+
+internals.getProducts = function (request, reply) {
+
     if (request.query.name) {
-        reply(findProducts(request.query.name));
+        return reply(internals.findProducts(request.query.name));
     }
-    else {
-        reply(products);
-    }
+    reply(products);
 }
 
-function findProducts(name) {
-    return products.filter(function(product) {
+internals.findProducts = function (name) {
+
+    return internals.products.filter((product) => {
+
         return product.name.toLowerCase() === name.toLowerCase();
     });
 }
 
-function getProduct(request, reply) {
-    const product = products.filter(function(p) {
-        return p.id === parseInt(request.params.id);
+internals.getProduct = function (request, reply) {
+
+    const filtered = internals.products.filter((product) => {
+
+        return product.id === parseInt(request.params.id);
     }).pop();
 
-    reply(product);
+    reply(filtered);
 }
 
-function addProduct(request, reply) {
+internals.addProduct = function (request, reply) {
+
     const product = {
-        id: products[products.length - 1].id + 1,
+        id: internals.products[internals.products.length - 1].id + 1,
         name: request.payload.name
     };
 
-    products.push(product);
+    internals.products.push(product);
 
     reply(product).created('/products/' + product.id);
 }
@@ -159,7 +168,8 @@ Also, in the instance when you have created an item you can use the `reply(produ
 Lastly, add a simple array to contain the products that the service will serve.
 
 ```javascript
-var products = [{
+let internals.products = [
+    {
         id: 1,
         name: 'Guitar'
     },
@@ -221,4 +231,3 @@ hapi that is covered in the [documentation](http://hapijs.com/api) and in
 [tutorials](http://hapijs.com/tutorials) .
 
 Please take a look at the github repository and feel free to provide any feedback you may have.
-
