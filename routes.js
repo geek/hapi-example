@@ -23,15 +23,15 @@ module.exports = [{
     config: {
         handler: addProduct,
         validate: {
-            payload:  Joi.string().required().min(3)
+            payload: {name: Joi.string().required().min(3)}
         }
     }
 }];
 
 const products = [{
-        id: 1,
-        name: 'Guitar'
-    },
+    id: 1,
+    name: 'Guitar'
+},
     {
         id: 2,
         name: 'Banjo'
@@ -48,13 +48,13 @@ function getProducts(request, reply) {
 }
 
 function findProducts(name) {
-    return products.filter(function(product) {
+    return products.filter(function (product) {
         return product.name.toLowerCase() === name.toLowerCase();
     });
 }
 
 function getProduct(request, reply) {
-    const product = products.filter(function(p) {
+    const product = products.filter(function (p) {
         return p.id === parseInt(request.params.id);
     }).pop();
 
