@@ -15,7 +15,7 @@
   },
   "private": "true",
   "scripts": {
-    "test": "lab -a code -L",
+    "test": "lab -a code -c",
     "test-tap": "lab -a code -r tap -o tests.tap",
     "test-cov-html": "lab -a code -r html -o coverage.html"
   }
