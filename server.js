@@ -27,3 +27,5 @@ server.register([require('vision'), require('inert'), {
     });
 
 });
+
+module.exports = server;

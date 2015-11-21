@@ -23,7 +23,7 @@ module.exports = [{
     config: {
         handler: addProduct,
         validate: {
-            payload:  Joi.string().required().min(3)
+            payload:  { name: Joi.string().required().min(3)}
         }
     }
 }];
