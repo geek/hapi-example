@@ -29,10 +29,14 @@ add a `package.json` file to the directory that looks like the following.
       "node": ">=4.0.0"
     },
     "dependencies": {
+      "code": "2.x.x",
+      "handlebars": "4.x.x",
       "hapi": "11.x.x",
-      "lout": "7.x.x",
+      "inert": "3.x.x",
       "joi": "7.x.x",
-      "handlebars": "4.x.x"
+      "lab": "7.x.x",
+      "lout": "7.x.x",
+      "vision": "4.x.x"
     }
 }
 ```
