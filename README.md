@@ -7,6 +7,12 @@
 [Hapi](https://github.com/hapijs/hapi/) will help get your server developed quickly with its wide
 range of configurable options.
 
+*This example is based on `hapi@11`*.
+Another great place to start if you are new to hapi is
+[the official get started](http://hapijs.com/tutorials),
+[learn hapi repo](https://github.com/nelsonic/learn-hapi),
+and [the nodeschool makemehapi](https://github.com/hapijs/makemehapi)
+
 ## Building a Products API
 
 The following example will walk you through using hapi to build a RESTful set of services for`
@@ -17,14 +23,15 @@ add a `package.json` file to the directory that looks like the following.
 ```json
 {
     "name": "ProductsAPI",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "main": "server",
     "engines": {
-        "node": ">=0.10.5"
+        "node": ">=4.0.0"
     },
     "dependencies": {
-        "hapi": "1.8.x",
-        "lout": "0.4.x",
+        "hapi": "11.x.x",
+        "lout": "7.2.x",
+        "joi": "7.x.x",
         "handlebars": "1.0.x"
     },
     "private": "true"
@@ -40,40 +47,40 @@ Create a `server.js file that will serve as the entry point for the service.
 var Hapi = require('hapi');
 var routes = require('./routes');
 
-var config = { };
-var server = new Hapi.Server('0.0.0.0', 8080, config);
-server.pack.require({ lout: { endpoint: '/docs' } }, function (err) {
+var config = {};
+var server = new Hapi.Server(config);
+server.register([require('vision'), require('inert'), require('lout')],
+     function(err) {
+        if(err)
+            console.log('Failed loading plugins');
+        else
+            server.start(function () {
+                console.log('Server running at:', server.info.uri);
+        });
 
-    if (err) {
-        console.log('Failed loading plugins');
-    }
 });
-
-server.addRoutes(routes);
-
-server.start();
 ```
 
-In the `server.js code above a new instance of the hapi server is started using the [server options]
-(http://spumko.github.io/resource/api/#server-options) specified in `config`.
+In the `server.js` code above a new instance of the hapi server is started using the [server options]
+(http://hapijs.com/api#new-serveroptions) specified in `config`.
 
-By registering the lout plugin, the [documentation generator](https://github.com/spumko/lout) will be enabled.
+By registering the lout plugin, the [documentation generator](https://github.com/hapijs/lout) will be enabled.
 The documentation generator provides a set of pages that explain what endpoints are available and the requirements
 for those endpoints.  The documentation generator will use the validation rules you will create for each route to
 construct appropriate documentation pages under the `/docs` path.
 
-[Hapi](https://github.com/spumko/hapi/) provides a function for adding a single route or an array of routes.
+[Hapi](https://github.com/hapijs/hapi/) provides a function for adding a single route or an array of routes.
 In this example we are adding an array of routes from a routes module, go ahead and create a `routes.js` file,
  which will contain the route information and handlers.  When defining the routes we will also be specifying
-  [validation requirements](http://spumko.github.io/resource/api/#hapi-types).
-   Therefore, at the top of the file require *hapi* and assign its *Types* property to a local variable like below.
+ [validation requirements](http://hapijs.com/tutorials/validation).
+Therefore, at the top of the file require *Joi*  like below.
 
 ```javascript
-var Types = require('hapi').types;
+var Joi = require('joi');
 ```
 
 For this example three routes will be created.  Below is the code you should use to add the routes,
-go ahead and add the code to your `routes.js file.
+go ahead and add the code to your `routes.js` file.
 
 ```javascript
 module.exports = [{
@@ -81,29 +88,18 @@ module.exports = [{
     path: '/products',
     config: {
         handler: getProducts,
-        validate: {
-            query: {
-                name: Types.String()
-            }
-        }
+        validate: { query: { name: Joi.string() } }
     }
 }, {
     method: 'GET',
     path: '/products/{id}',
-    config: {
-        handler: getProduct
-    }
+    handler: getProduct
 }, {
     method: 'POST',
     path: '/products',
     config: {
         handler: addProduct,
-        payload: 'parse',
-        validate: {
-            payload: {
-                name: Types.String().required().min(3)
-            }
-        }
+        validate: { payload:  Joi.string().required().min(3) }
     }
 }];
 ```
@@ -121,48 +117,44 @@ The request body must contain a parameter for name that has a minimum of 3 chara
 Next add the handlers to the _routes.js_ file.
 
 ```javascript
-function getProducts(request) {
-
+function getProducts(request, reply) {
     if (request.query.name) {
-        request.reply(findProducts(request.query.name));
+        reply(findProducts(request.query.name));
     }
     else {
-        request.reply(products);
+        reply(products);
     }
 }
 
 function findProducts(name) {
-
     return products.filter(function(product) {
         return product.name.toLowerCase() === name.toLowerCase();
     });
 }
 
-function getProduct(request) {
-
-    var product = products.filter(function(p) {
+function getProduct(request, reply) {
+    const product = products.filter(function(p) {
         return p.id === parseInt(request.params.id);
     }).pop();
 
-    request.reply(product);
+    reply(product);
 }
 
-function addProduct(request) {
-
-    var product = {
+function addProduct(request, reply) {
+    const product = {
         id: products[products.length - 1].id + 1,
         name: request.payload.name
     };
 
     products.push(product);
 
-    request.reply(product).created('/products/' + product.id);
+    reply(product).created('/products/' + product.id);
 }
 ```
 
-As you can see in the handlers, hapi provides a simple way to add a response body by using the `request.reply` function.
- Also, in the instance when you have created an item you can use the `request.reply(product).created('/products/' + product.id)`
-  functions to send a `201` response and set a custom `Location` header.
+As you can see in the handlers, hapi provides a simple way to add a response body by using the `reply` function.
+Also, in the instance when you have created an item you can use the `reply(product).created('/products/' + product.id)`
+ functions to send a `201` response and set a custom `Location` header.
 
 Lastly, add a simple array to contain the products that the service will serve.
 
@@ -210,21 +202,23 @@ Now if you navigate to the _Location_ specified in the response headers you shou
 
 Other features
 There are a lot of different configuration features that you can add to the server.
-The extensive list can be found in the API documentation at <http://spumko.github.io/resource/api/#server-options>.
+The extensive list can be found in the API documentation at <http://hapijs.com/api>.
 
 The built-in cache support has providers for memory, mongo and redis.
-Setting up cache is as simple as passing cache: true as part of the server configuration.
+Setting up cache is as simple as passing `cache: true` as part of the server configuration.
 
 Additionally, there are several configuration options available on a per route basis.
-The full list can be found at <http://spumko.github.io/resource/api/#server-route-options->.
+The full list can be found at <http://hapijs.com/api#route-configuration>.
 For example, caching expiration times can also be configured on a per route basis.
 Also, you can have per-route authentication settings.
 
 ## Conclusion
 
-By now you should have a decent understanding of what hapi has to offer.
+By now you should have a decent understanding of what *hapi* has to offer.
+
 There are still many other features and options available to you when using
-hapi that is covered in the documentation.
+hapi that is covered in the [documentation](http://hapijs.com/api) and in
+[tutorials](http://hapijs.com/tutorials) .
 
 Please take a look at the github repository and feel free to provide any feedback you may have.
 
