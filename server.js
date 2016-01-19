@@ -9,7 +9,7 @@ const Routes = require('./routes');
 const config = {};
 const server = new Hapi.Server(config);
 
-const port = 8080;
+const port = process.env.PORT || 8080;
 const host = '0.0.0.0';
 server.connection({ port: port, host: host });
 
@@ -26,7 +26,7 @@ server.register([Vision, Inert, loutRegister], function(err) {
     }
 
     server.route(Routes);
-    
+
     server.start(function () {
         console.log('Server running at:', server.info.uri);
     });
