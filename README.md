@@ -57,9 +57,10 @@ var config = {};
 var server = new hapi.Server(config);
 server.register([Vision, Inert, Lout], (err) => {
 
-    if (err)
+    if (err) {
         console.error('Failed loading plugins');
         process.exit(1);
+    }
 
     server.start(() => {
 
